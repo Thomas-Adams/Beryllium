@@ -1,10 +1,10 @@
 from typing import List, Optional
 
-from sqlalchemy import BigInteger, Boolean, CheckConstraint, Column, DateTime, Double, ForeignKeyConstraint, Index, Integer, PrimaryKeyConstraint, String, Text, text, Enum
+from sqlalchemy import BigInteger, Boolean, CheckConstraint, DateTime, Double, ForeignKeyConstraint, Index, Integer, PrimaryKeyConstraint, String, Text, text, Enum
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import Mapped, declarative_base, mapped_column, relationship
+from sqlalchemy.orm import declarative_base, mapped_column, relationship
 from sqlalchemy.orm.base import Mapped
-from sqlalchemy.sql.sqltypes import NullType
+from sqlalchemy_utils import LtreeType
 
 Base = declarative_base()
 
@@ -23,7 +23,7 @@ class CmsNodes(Base):
     id = mapped_column(BigInteger)
     parent_id = mapped_column(BigInteger)
     cms_node_type = mapped_column(String(20))
-    path = mapped_column(NullType)
+    path = mapped_column(LtreeType)
     sort_order = mapped_column(Integer)
     status_id = mapped_column(BigInteger)
     version = mapped_column(BigInteger)

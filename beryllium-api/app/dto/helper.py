@@ -3,6 +3,7 @@ from typing import Any
 from pydantic import ConfigDict, BaseModel, Field, create_model
 from pydantic_sqlalchemy_2 import sqlalchemy_to_pydantic
 from sqlalchemy import String
+from sqlalchemy_utils import LtreeType
 
 # Fields that are always auto-generated
 AUTO_FIELDS = ["id", "version", "created_at", "updated_at", "created_by", "updated_by"]
@@ -50,9 +51,18 @@ def sqlalchemy_model_to_validated_pydantic(sa_model: type, exclude_fields=None) 
     for column in sa_model.__table__.columns:
         if excludes and ( column.name in excludes):
             continue
-        py_type = getattr(column.type, "python_type", Any)
-        field_kwargs = {}
 
+
+        try:
+            py_type = getattr(column.type, "python_type", Any)
+        except NotImplementedError:
+            # Map known custom types that don't implement python_type
+            if isinstance(column.type, LtreeType):
+                py_type = str
+            else:
+                py_type = Any
+
+        field_kwargs = {}
         # String length -> max_length
         if isinstance(column.type, String) and column.type.length:
             field_kwargs["max_length"] = column.type.length

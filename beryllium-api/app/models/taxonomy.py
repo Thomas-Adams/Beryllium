@@ -1,6 +1,6 @@
 from typing import Optional, List
 
-from psycopg2.extensions import JSONB
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy import ForeignKeyConstraint, PrimaryKeyConstraint, Index, String, Text, BigInteger, DateTime, UniqueConstraint
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
@@ -12,9 +12,7 @@ class Categories(Base):
     __table_args__ = (
         ForeignKeyConstraint(['status_id'], ['status.id'], name='categories_status_fk'),
         PrimaryKeyConstraint('id', name='categories_pk'),
-        Index('idx_categories_name', 'name'),
-        UniqueConstraint(name='uq_categories_name', columns=['name'])
-
+        Index('idx_categories_name', 'name', unique=True)
     )
 
     id = mapped_column(BigInteger)
@@ -39,8 +37,8 @@ class Tags(Base):
     __table_args__ = (
         ForeignKeyConstraint(['status_id'], ['status.id'], name='tags_status_fk'),
         PrimaryKeyConstraint('id', name='tags_pk'),
-        Index('idx_tags_name', 'name'),
-        UniqueConstraint(name='uq_tags_name', columns=['name'])
+        Index('idx_tags_name', 'name', unique=True)
+
     )
 
     id = mapped_column(BigInteger)

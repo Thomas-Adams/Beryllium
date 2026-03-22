@@ -19,6 +19,11 @@ UserCreate = make_create_dto(Users)
 UserUpdate = make_update_dto(Users)
 UserRead = make_read_dto(Users, exclude_fks=STATUS_FK, status=StatusRead)
 
+
+CategoryCreate = make_create_dto(Categories)
+CategoryUpdate = make_update_dto(Categories)
+CategoryRead = make_read_dto(Categories, exclude_fks=STATUS_FK, status=StatusRead)
+
 MediaTypesCreate = make_create_dto(MediaTypes)
 MediaTypesUpdate = make_update_dto(MediaTypes)
 MediaTypesRead = make_read_dto(MediaTypes, exclude_fks=STATUS_FK, status=StatusRead)
