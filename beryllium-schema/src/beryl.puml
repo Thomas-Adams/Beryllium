@@ -1,0 +1,390 @@
+@startuml
+skinparam linetype ortho
+
+entity "**allowed_children**" {
+  + ""id"": //integer [PK]//
+  --
+  ""parent_definition_id"": //integer [FK]//
+  ""child_definition_id"": //integer [FK]//
+  ""max_count"": //integer //
+  ""min_count"": //integer //
+  ""sort_order"": //integer //
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**categories**" {
+  + ""id"": //integer [PK]//
+  --
+  ""name"": //character varying(255) //
+  ""description"": //text //
+  ""meta_data"": //jsonb //
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**cms_nodes**" {
+  + ""id"": //integer [PK]//
+  --
+  ""parent_id"": //integer [FK]//
+  ""cms_node_type"": //character varying(20) //
+  ""path"": //ltree //
+  ""sort_order"": //integer //
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**content**" {
+  + ""id"": //integer [PK]//
+  --
+  ""cms_node_id"": //integer [FK]//
+  ""content_definition_id"": //integer [FK]//
+  ""title"": //character varying(255) //
+  ""description"": //text //
+  ""meta_data"": //jsonb //
+  ""data"": //jsonb //
+  ""category_id"": //integer [FK]//
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**content_definition_items**" {
+  + ""id"": //integer [PK]//
+  --
+  *""content_definition_id"": //integer [FK]//
+  ""content_element_id"": //integer [FK]//
+  ""content_element_group_id"": //integer [FK]//
+  *""sort_order"": //integer //
+  ""override_schema"": //jsonb //
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**content_definitions**" {
+  + ""id"": //integer [PK]//
+  --
+  ""name"": //character varying(255) //
+  ""description"": //text //
+  ""sort_order"": //integer //
+  ""container"": //boolean //
+  ""comment"": //text //
+  ""schema"": //jsonb //
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**content_element_groups**" {
+  + ""id"": //integer [PK]//
+  --
+  ""content_element_id"": //integer [FK]//
+  ""content_group_id"": //integer [FK]//
+  ""name"": //character varying(255) //
+  ""sort_order"": //integer //
+  ""schema"": //jsonb //
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**content_elements**" {
+  + ""id"": //integer [PK]//
+  --
+  ""name"": //character varying(255) //
+  ""description"": //text //
+  ""sort_order"": //integer //
+  ""field_id"": //integer [FK]//
+  *""control_name"": //character varying(255) //
+  ""schema"": //jsonb //
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**content_groups**" {
+  + ""id"": //integer [PK]//
+  --
+  ""name"": //character varying(255) //
+  ""description"": //text //
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**content_tags**" {
+  + ""id"": //integer [PK]//
+  --
+  ""content_id"": //integer [FK]//
+  ""tag_id"": //integer [FK]//
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**content_types**" {
+  + ""id"": //integer [PK]//
+  --
+  ""name"": //character varying(255) //
+  ""description"": //text //
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**data_fields**" {
+  + ""id"": //integer [PK]//
+  --
+  ""name"": //character varying(255) //
+  ""description"": //text //
+  ""datatype_id"": //integer //
+  ""pattern"": //character varying(255) //
+  ""max_length"": //integer //
+  ""min_length"": //integer //
+  ""required"": //boolean //
+  ""format"": //character varying(255) //
+  ""schema"": //jsonb //
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**data_types**" {
+  + ""id"": //integer [PK]//
+  --
+  ""name"": //character varying(255) //
+  ""description"": //text //
+  ""scala"": //character varying(255) //
+  ""typescript"": //character varying(255) //
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**folder_allowed_children**" {
+  + ""id"": //integer [PK]//
+  --
+  ""allowed_definition_id"": //integer [FK]//
+  ""allow_folders"": //boolean //
+  ""allow_all_content"": //boolean //
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**folders**" {
+  + ""id"": //integer [PK]//
+  --
+  ""cms_node_id"": //integer [FK]//
+  ""name"": //character varying(255) //
+  ""description"": //text //
+  ""meta_data"": //jsonb //
+  ""icon"": //character varying(255) //
+  ""category_id"": //integer [FK]//
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**media**" {
+  + ""id"": //integer [PK]//
+  --
+  ""name"": //character varying(255) //
+  ""description"": //text //
+  ""media_type_id"": //integer [FK]//
+  ""url"": //character varying(255) //
+  ""mime_type_id"": //character varying(50) [FK]//
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**media_types**" {
+  + ""id"": //integer [PK]//
+  --
+  ""name"": //character varying(255) //
+  ""description"": //text //
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**mime_types**" {
+  + ""id"": //character varying(50) [PK]//
+  --
+  ""name"": //character varying(255) //
+  ""description"": //text //
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(255) //
+  ""updated_by"": //character varying(255) //
+}
+
+entity "**status**" {
+  + ""id"": //integer [PK]//
+  --
+  ""name"": //character varying(255) //
+  ""description"": //text //
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**tags**" {
+  + ""id"": //integer [PK]//
+  --
+  ""name"": //character varying(255) //
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+  ""created_by"": //character varying(50) //
+  ""updated_by"": //character varying(50) //
+}
+
+entity "**users**" {
+  + ""id"": //integer [PK]//
+  --
+  *""username"": //character varying(255) //
+  *""email"": //character varying(255) //
+  *""password_hash"": //character varying(255) //
+  ""status_id"": //integer [FK]//
+  ""version"": //integer //
+  ""created_at"": //timestamp with time zone //
+  ""updated_at"": //timestamp with time zone //
+}
+
+"**allowed_children**"   }--  "**content_definitions**"
+
+"**allowed_children**"   }--  "**content_definitions**"
+
+"**allowed_children**"   }--  "**status**"
+
+"**categories**"   }--  "**status**"
+
+"**cms_nodes**"   }--  "**cms_nodes**"
+
+"**cms_nodes**"   }--  "**status**"
+
+"**content**"   }--  "**categories**"
+
+"**content**"   }--  "**cms_nodes**"
+
+"**content**"   }--  "**content_definitions**"
+
+"**content**"   }--  "**status**"
+
+"**content_definition_items**"   }--  "**content_definitions**"
+
+"**content_definition_items**"   }--  "**content_elements**"
+
+"**content_definition_items**"   }--  "**content_element_groups**"
+
+"**content_definition_items**"   }--  "**status**"
+
+"**content_definitions**"   }--  "**status**"
+
+"**content_element_groups**"   }--  "**content_elements**"
+
+"**content_element_groups**"   }--  "**content_groups**"
+
+"**content_element_groups**"   }--  "**status**"
+
+"**content_elements**"   }--  "**data_fields**"
+
+"**content_elements**"   }--  "**status**"
+
+"**content_groups**"   }--  "**status**"
+
+"**content_tags**"   }--  "**content**"
+
+"**content_tags**"   }--  "**status**"
+
+"**content_tags**"   }--  "**tags**"
+
+"**content_types**"   }--  "**status**"
+
+"**data_fields**"   }--  "**status**"
+
+"**data_types**"   }--  "**status**"
+
+"**folder_allowed_children**"   }--  "**content_definitions**"
+
+"**folder_allowed_children**"   }--  "**status**"
+
+"**folders**"   }--  "**categories**"
+
+"**folders**"   }--  "**cms_nodes**"
+
+"**folders**"   }--  "**status**"
+
+"**media**"   }--  "**media_types**"
+
+"**media**"   }--  "**mime_types**"
+
+"**media**"   }--  "**status**"
+
+"**media_types**"   }--  "**status**"
+
+"**tags**"   }--  "**status**"
+
+"**users**"   }--  "**status**"
+@enduml

@@ -1,0 +1,6 @@
+pydantic-settings>=2.13.1
+
+fastapi
+passlib
+sqlalchemy
+fastapi-pagination

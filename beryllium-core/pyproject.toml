@@ -1,0 +1,13 @@
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+# Markers for selective test running
+markers = [
+    "models: SQLAlchemy model tests",
+    "dto: Pydantic DTO tests",
+    "integration: Full integration tests",
+]
