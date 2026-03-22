@@ -10,7 +10,8 @@ class MimeTypes(Base):
     __tablename__ = 'mime_types'
     __table_args__ = (
         PrimaryKeyConstraint('id', name='mime_types_pk'),
-        Index('idx_mime_types_name', 'name')
+        Index('idx_mime_types_name', 'name'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(String(50))
@@ -33,7 +34,8 @@ class MediaTypes(Base):
     __table_args__ = (
         ForeignKeyConstraint(['status_id'], ['status.id'], name='media_types_status_fk'),
         PrimaryKeyConstraint('id', name='media_types_pk'),
-        Index('idx_media_types_name', 'name')
+        Index('idx_media_types_name', 'name'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)
@@ -58,7 +60,9 @@ class Media(Base):
         ForeignKeyConstraint(['mime_type_id'], ['mime_types.id'], name='media_mime_type_fk'),
         ForeignKeyConstraint(['status_id'], ['status.id'], name='media_status_fk'),
         PrimaryKeyConstraint('id', name='media_pk'),
-        Index('idx_media_name', 'name')
+        Index('idx_media_name', 'name'),
+        {'schema': 'main'}
+
     )
 
     id = mapped_column(BigInteger)
@@ -91,7 +95,8 @@ class MediaVariant(Base):
     __table_args__ = (
         ForeignKeyConstraint(['media_id'], ['media.id'], name='media_variant_media_fk'),
         ForeignKeyConstraint(['status_id'], ['status.id'], name='media_variant_status_fk'),
-        PrimaryKeyConstraint('id', name='media_variant_pk')
+        PrimaryKeyConstraint('id', name='media_variant_pk'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)

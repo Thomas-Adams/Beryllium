@@ -2,11 +2,10 @@ from typing import List, Optional
 
 from sqlalchemy import BigInteger, Boolean, CheckConstraint, DateTime, Double, ForeignKeyConstraint, Index, Integer, PrimaryKeyConstraint, String, Text, text, Enum
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import declarative_base, mapped_column, relationship
+from sqlalchemy.orm import  mapped_column, relationship
 from sqlalchemy.orm.base import Mapped
 from sqlalchemy_utils import LtreeType
-
-Base = declarative_base()
+from app.models.base import Base
 
 
 class CmsNodes(Base):
@@ -17,7 +16,8 @@ class CmsNodes(Base):
         PrimaryKeyConstraint('id', name='cms_nodes_pk'),
         Index('idx_cms_nodes_path', 'path'),
         Index('idx_cms_nodes_sort_order', 'sort_order'),
-        Index('idx_cms_nodes_type', 'cms_node_type')
+        Index('idx_cms_nodes_type', 'cms_node_type'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)
@@ -46,7 +46,8 @@ class ContentDefinitions(Base):
         ForeignKeyConstraint(['status_id'], ['status.id'], name='content_definitions_status_fk'),
         PrimaryKeyConstraint('id', name='content_definitions_pk'),
         Index('idx_content_definitions_name', 'name'),
-        Index('idx_content_definitions_sort_order', 'sort_order')
+        Index('idx_content_definitions_sort_order', 'sort_order'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)
@@ -76,7 +77,8 @@ class ContentGroups(Base):
     __table_args__ = (
         ForeignKeyConstraint(['status_id'], ['status.id'], name='content_groups_status_fk'),
         PrimaryKeyConstraint('id', name='content_groups_pk'),
-        Index('idx_content_groups_name', 'name')
+        Index('idx_content_groups_name', 'name'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)
@@ -98,7 +100,8 @@ class ContentTypes(Base):
     __table_args__ = (
         ForeignKeyConstraint(['status_id'], ['status.id'], name='content_types_status_fk'),
         PrimaryKeyConstraint('id', name='content_types_pk'),
-        Index('idx_content_types_name', 'name')
+        Index('idx_content_types_name', 'name'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)
@@ -188,7 +191,8 @@ class AllowedChildren(Base):
         ForeignKeyConstraint(['parent_definition_id'], ['content_definitions.id'], name='allowed_children_parent_fk'),
         ForeignKeyConstraint(['status_id'], ['status.id'], name='allowed_children_status_fk'),
         PrimaryKeyConstraint('id', name='allowed_children_pk'),
-        Index('idx_allowed_children_sort_order', 'sort_order')
+        Index('idx_allowed_children_sort_order', 'sort_order'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)
@@ -217,7 +221,8 @@ class Content(Base):
         ForeignKeyConstraint(['content_definition_id'], ['content_definitions.id'], name='content_definition_fk'),
         ForeignKeyConstraint(['status_id'], ['status.id'], name='content_status_fk'),
         PrimaryKeyConstraint('id', name='content_pk'),
-        Index('idx_content_title', 'title')
+        Index('idx_content_title', 'title'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)
@@ -250,7 +255,8 @@ class ContentElements(Base):
         PrimaryKeyConstraint('id', name='content_elements_pk'),
         Index('idx_content_elements_control_name', 'control_name'),
         Index('idx_content_elements_name', 'name'),
-        Index('idx_content_elements_sort_order', 'sort_order')
+        Index('idx_content_elements_sort_order', 'sort_order'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(Integer)
@@ -280,7 +286,8 @@ class FolderAllowedChildren(Base):
         ForeignKeyConstraint(['status_id'], ['status.id'], name='folder_allowed_children_status_fk'),
         PrimaryKeyConstraint('id', name='folder_allowed_children_pk'),
         Index('idx_folder_allowed_children_allow_all_content', 'allow_all_content'),
-        Index('idx_folder_allowed_children_allow_folders', 'allow_folders')
+        Index('idx_folder_allowed_children_allow_folders', 'allow_folders'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)
@@ -305,7 +312,8 @@ class Folders(Base):
         ForeignKeyConstraint(['cms_node_id'], ['cms_nodes.id'], name='folders_cms_node_fk'),
         ForeignKeyConstraint(['status_id'], ['status.id'], name='folders_status_fk'),
         PrimaryKeyConstraint('id', name='folders_pk'),
-        Index('idx_folders_name', 'name')
+        Index('idx_folders_name', 'name'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)
@@ -335,7 +343,8 @@ class ContentElementGroups(Base):
         ForeignKeyConstraint(['status_id'], ['status.id'], name='content_element_groups_status_fk'),
         PrimaryKeyConstraint('id', name='content_element_groups_pk'),
         Index('idx_content_element_groups_element', 'content_element_id'),
-        Index('idx_content_element_groups_name', 'name')
+        Index('idx_content_element_groups_name', 'name'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)
@@ -366,7 +375,8 @@ class ContentDefinitionItems(Base):
         ForeignKeyConstraint(['content_element_id'], ['content_elements.id'], name='content_definition_items_element_fk'),
         ForeignKeyConstraint(['status_id'], ['status.id'], name='content_definition_items_status_fk'),
         PrimaryKeyConstraint('id', name='content_definition_items_pk'),
-        Index('idx_def_items_definition', 'content_definition_id', 'sort_order')
+        Index('idx_def_items_definition', 'content_definition_id', 'sort_order'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)

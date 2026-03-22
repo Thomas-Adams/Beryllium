@@ -12,7 +12,8 @@ class Users(Base):
         ForeignKeyConstraint(['status_id'], ['status.id'], name='users_status_fk'),
         PrimaryKeyConstraint('id', name='users_pk'),
         Index('idx_users_email', 'email', unique=True),
-        Index('idx_users_username', 'username', unique=True)
+        Index('idx_users_username', 'username', unique=True),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)

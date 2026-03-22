@@ -12,7 +12,8 @@ class Categories(Base):
     __table_args__ = (
         ForeignKeyConstraint(['status_id'], ['status.id'], name='categories_status_fk'),
         PrimaryKeyConstraint('id', name='categories_pk'),
-        Index('idx_categories_name', 'name', unique=True)
+        Index('idx_categories_name', 'name', unique=True),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)
@@ -37,7 +38,8 @@ class Tags(Base):
     __table_args__ = (
         ForeignKeyConstraint(['status_id'], ['status.id'], name='tags_status_fk'),
         PrimaryKeyConstraint('id', name='tags_pk'),
-        Index('idx_tags_name', 'name', unique=True)
+        Index('idx_tags_name', 'name', unique=True),
+        {'schema': 'main'}
 
     )
 
@@ -60,7 +62,8 @@ class ContentTags(Base):
     __table_args__ = (
         ForeignKeyConstraint(['content_id'], ['content.id'], name='content_tags_content_fk'),
         ForeignKeyConstraint(['tag_id'], ['tags.id'], name='content_tags_tag_fk'),
-        PrimaryKeyConstraint('id', name='content_tags_pk')
+        PrimaryKeyConstraint('id', name='content_tags_pk'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)
@@ -81,7 +84,8 @@ class MediaTags(Base):
     __table_args__ = (
         ForeignKeyConstraint(['media_variant_id'], ['media_variant.id'], name='media_tags_media_variant_fk'),
         ForeignKeyConstraint(['tag_id'], ['tags.id'], name='media_tags_tags_fk'),
-        PrimaryKeyConstraint('id', name='media_tags_pk')
+        PrimaryKeyConstraint('id', name='media_tags_pk'),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)

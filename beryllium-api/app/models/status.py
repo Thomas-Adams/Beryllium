@@ -20,7 +20,8 @@ class Status(Base):
     __tablename__ = 'status'
     __table_args__ = (
         PrimaryKeyConstraint('id', name='status_pkey'),
-        Index('idx_status_name', 'name', unique=True)
+        Index('idx_status_name', 'name', unique=True),
+        {'schema': 'main'}
     )
 
     id = mapped_column(BigInteger)
