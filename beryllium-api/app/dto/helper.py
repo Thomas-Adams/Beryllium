@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 from pydantic import ConfigDict, BaseModel, Field, create_model
 from pydantic_sqlalchemy_2 import sqlalchemy_to_pydantic
@@ -61,6 +61,9 @@ def sqlalchemy_model_to_validated_pydantic(sa_model: type, exclude_fields=None) 
                 py_type = str
             else:
                 py_type = Any
+
+        if column.nullable:
+            py_type = Optional[py_type]
 
         field_kwargs = {}
         # String length -> max_length

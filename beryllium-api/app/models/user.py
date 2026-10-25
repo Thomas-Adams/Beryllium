@@ -9,7 +9,7 @@ from app.models.base import Base
 class Users(Base):
     __tablename__ = 'users'
     __table_args__ = (
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='users_status_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='users_status_fk'),
         PrimaryKeyConstraint('id', name='users_pk'),
         Index('idx_users_email', 'email', unique=True),
         Index('idx_users_username', 'username', unique=True),

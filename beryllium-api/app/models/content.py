@@ -11,8 +11,8 @@ from app.models.base import Base
 class CmsNodes(Base):
     __tablename__ = 'cms_nodes'
     __table_args__ = (
-        ForeignKeyConstraint(['parent_id'], ['cms_nodes.id'], name='cms_nodes_parent_fk'),
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='cms_nodes_status_fk'),
+        ForeignKeyConstraint(['parent_id'], ['main.cms_nodes.id'], name='cms_nodes_parent_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='cms_nodes_status_fk'),
         PrimaryKeyConstraint('id', name='cms_nodes_pk'),
         Index('idx_cms_nodes_path', 'path'),
         Index('idx_cms_nodes_sort_order', 'sort_order'),
@@ -43,7 +43,7 @@ class CmsNodes(Base):
 class ContentDefinitions(Base):
     __tablename__ = 'content_definitions'
     __table_args__ = (
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='content_definitions_status_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='content_definitions_status_fk'),
         PrimaryKeyConstraint('id', name='content_definitions_pk'),
         Index('idx_content_definitions_name', 'name'),
         Index('idx_content_definitions_sort_order', 'sort_order'),
@@ -75,7 +75,7 @@ class ContentDefinitions(Base):
 class ContentGroups(Base):
     __tablename__ = 'content_groups'
     __table_args__ = (
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='content_groups_status_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='content_groups_status_fk'),
         PrimaryKeyConstraint('id', name='content_groups_pk'),
         Index('idx_content_groups_name', 'name'),
         {'schema': 'main'}
@@ -98,7 +98,7 @@ class ContentGroups(Base):
 class ContentTypes(Base):
     __tablename__ = 'content_types'
     __table_args__ = (
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='content_types_status_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='content_types_status_fk'),
         PrimaryKeyConstraint('id', name='content_types_pk'),
         Index('idx_content_types_name', 'name'),
         {'schema': 'main'}
@@ -182,14 +182,16 @@ class DataFields(Base):
 
     datatype: Mapped[Optional['DataTypes']] = relationship('DataTypes', back_populates='data_fields')
     status: Mapped[Optional['Status']] = relationship('Status', back_populates='data_fields')
+    content_elements: Mapped[List['ContentElements']] = relationship('ContentElements', uselist=True,
+                                                                     back_populates='field')  # ← add this
 
 
 class AllowedChildren(Base):
     __tablename__ = 'allowed_children'
     __table_args__ = (
-        ForeignKeyConstraint(['child_definition_id'], ['content_definitions.id'], name='allowed_children_child_fk'),
-        ForeignKeyConstraint(['parent_definition_id'], ['content_definitions.id'], name='allowed_children_parent_fk'),
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='allowed_children_status_fk'),
+        ForeignKeyConstraint(['child_definition_id'], ['main.content_definitions.id'], name='allowed_children_child_fk'),
+        ForeignKeyConstraint(['parent_definition_id'], ['main.content_definitions.id'], name='allowed_children_parent_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='allowed_children_status_fk'),
         PrimaryKeyConstraint('id', name='allowed_children_pk'),
         Index('idx_allowed_children_sort_order', 'sort_order'),
         {'schema': 'main'}
@@ -208,18 +210,22 @@ class AllowedChildren(Base):
     created_by = mapped_column(String(50))
     updated_by = mapped_column(String(50))
 
-    child_definition: Mapped[Optional['ContentDefinitions']] = relationship('ContentDefinitions', foreign_keys=[child_definition_id], back_populates='allowed_children')
-    parent_definition: Mapped[Optional['ContentDefinitions']] = relationship('ContentDefinitions', foreign_keys=[parent_definition_id], back_populates='allowed_children_')
+    child_definition: Mapped[Optional['ContentDefinitions']] = relationship('ContentDefinitions',
+                                                                            foreign_keys=[child_definition_id],
+                                                                            back_populates='allowed_children_child')
+    parent_definition: Mapped[Optional['ContentDefinitions']] = relationship('ContentDefinitions',
+                                                                             foreign_keys=[parent_definition_id],
+                                                                             back_populates='allowed_children_parent')
     status: Mapped[Optional['Status']] = relationship('Status', back_populates='allowed_children')
 
 
 class Content(Base):
     __tablename__ = 'content'
     __table_args__ = (
-        ForeignKeyConstraint(['category_id'], ['categories.id'], name='content_category_fk'),
-        ForeignKeyConstraint(['cms_node_id'], ['cms_nodes.id'], name='content_cms_node_fk'),
-        ForeignKeyConstraint(['content_definition_id'], ['content_definitions.id'], name='content_definition_fk'),
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='content_status_fk'),
+        ForeignKeyConstraint(['category_id'], ['main.categories.id'], name='content_category_fk'),
+        ForeignKeyConstraint(['cms_node_id'], ['main.cms_nodes.id'], name='content_cms_node_fk'),
+        ForeignKeyConstraint(['content_definition_id'], ['main.content_definitions.id'], name='content_definition_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='content_status_fk'),
         PrimaryKeyConstraint('id', name='content_pk'),
         Index('idx_content_title', 'title'),
         {'schema': 'main'}
@@ -250,8 +256,8 @@ class Content(Base):
 class ContentElements(Base):
     __tablename__ = 'content_elements'
     __table_args__ = (
-        ForeignKeyConstraint(['field_id'], ['data_fields.id'], name='content_elements_data_fields_fk'),
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='content_elements_status_fk'),
+        ForeignKeyConstraint(['field_id'], ['main.data_fields.id'], name='content_elements_data_fields_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='content_elements_status_fk'),
         PrimaryKeyConstraint('id', name='content_elements_pk'),
         Index('idx_content_elements_control_name', 'control_name'),
         Index('idx_content_elements_name', 'name'),
@@ -282,8 +288,8 @@ class ContentElements(Base):
 class FolderAllowedChildren(Base):
     __tablename__ = 'folder_allowed_children'
     __table_args__ = (
-        ForeignKeyConstraint(['allowed_definition_id'], ['content_definitions.id'], name='folder_allowed_children_definition_fk'),
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='folder_allowed_children_status_fk'),
+        ForeignKeyConstraint(['allowed_definition_id'], ['main.content_definitions.id'], name='folder_allowed_children_definition_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='folder_allowed_children_status_fk'),
         PrimaryKeyConstraint('id', name='folder_allowed_children_pk'),
         Index('idx_folder_allowed_children_allow_all_content', 'allow_all_content'),
         Index('idx_folder_allowed_children_allow_folders', 'allow_folders'),
@@ -308,9 +314,9 @@ class FolderAllowedChildren(Base):
 class Folders(Base):
     __tablename__ = 'folders'
     __table_args__ = (
-        ForeignKeyConstraint(['category_id'], ['categories.id'], name='folders_category_fk'),
-        ForeignKeyConstraint(['cms_node_id'], ['cms_nodes.id'], name='folders_cms_node_fk'),
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='folders_status_fk'),
+        ForeignKeyConstraint(['category_id'], ['main.categories.id'], name='folders_category_fk'),
+        ForeignKeyConstraint(['cms_node_id'], ['main.cms_nodes.id'], name='folders_cms_node_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='folders_status_fk'),
         PrimaryKeyConstraint('id', name='folders_pk'),
         Index('idx_folders_name', 'name'),
         {'schema': 'main'}
@@ -338,9 +344,9 @@ class Folders(Base):
 class ContentElementGroups(Base):
     __tablename__ = 'content_element_groups'
     __table_args__ = (
-        ForeignKeyConstraint(['content_element_id'], ['content_elements.id'], name='content_element_groups_content_elements_fk'),
-        ForeignKeyConstraint(['content_group_id'], ['content_groups.id'], name='content_element_groups_content_groups_fk'),
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='content_element_groups_status_fk'),
+        ForeignKeyConstraint(['content_element_id'], ['main.content_elements.id'], name='content_element_groups_content_elements_fk'),
+        ForeignKeyConstraint(['content_group_id'], ['main.content_groups.id'], name='content_element_groups_content_groups_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='content_element_groups_status_fk'),
         PrimaryKeyConstraint('id', name='content_element_groups_pk'),
         Index('idx_content_element_groups_element', 'content_element_id'),
         Index('idx_content_element_groups_name', 'name'),
@@ -370,10 +376,10 @@ class ContentDefinitionItems(Base):
     __tablename__ = 'content_definition_items'
     __table_args__ = (
         CheckConstraint('content_element_id IS NOT NULL AND content_element_group_id IS NULL OR content_element_id IS NULL AND content_element_group_id IS NOT NULL', name='exactly_one_reference'),
-        ForeignKeyConstraint(['content_definition_id'], ['content_definitions.id'], name='content_definition_items_def_fk'),
-        ForeignKeyConstraint(['content_element_group_id'], ['content_element_groups.id'], name='content_definition_items_group_fk'),
-        ForeignKeyConstraint(['content_element_id'], ['content_elements.id'], name='content_definition_items_element_fk'),
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='content_definition_items_status_fk'),
+        ForeignKeyConstraint(['content_definition_id'], ['main.content_definitions.id'], name='content_definition_items_def_fk'),
+        ForeignKeyConstraint(['content_element_group_id'], ['main.content_element_groups.id'], name='content_definition_items_group_fk'),
+        ForeignKeyConstraint(['content_element_id'], ['main.content_elements.id'], name='content_definition_items_element_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='content_definition_items_status_fk'),
         PrimaryKeyConstraint('id', name='content_definition_items_pk'),
         Index('idx_def_items_definition', 'content_definition_id', 'sort_order'),
         {'schema': 'main'}

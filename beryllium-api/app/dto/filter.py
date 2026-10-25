@@ -22,6 +22,8 @@ class Operator(str, Enum):
 
 
 
+
+
 class FilterCondition(BaseModel):
     column: str
     operator: Operator = Operator.EQ

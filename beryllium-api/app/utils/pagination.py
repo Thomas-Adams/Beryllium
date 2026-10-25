@@ -14,6 +14,6 @@ async def paginate_query(
         session,
         query,
         transformer=lambda items: [
-            dto_class.model_validate(item) for item in items
+            dto_class.model_validate(item,from_attributes=True) for item in items
         ],
     )

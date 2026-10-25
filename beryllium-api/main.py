@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_pagination import add_pagination
 
 from app.config import settings
 from app.database.database import async_session_factory
@@ -35,6 +36,8 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+
+add_pagination(app)
 # CORS — allow Angular dev server
 app.add_middleware(
     CORSMiddleware,

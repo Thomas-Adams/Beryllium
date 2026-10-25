@@ -32,7 +32,7 @@ class MimeTypes(Base):
 class MediaTypes(Base):
     __tablename__ = 'media_types'
     __table_args__ = (
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='media_types_status_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='media_types_status_fk'),
         PrimaryKeyConstraint('id', name='media_types_pk'),
         Index('idx_media_types_name', 'name'),
         {'schema': 'main'}
@@ -56,9 +56,9 @@ class MediaTypes(Base):
 class Media(Base):
     __tablename__ = 'media'
     __table_args__ = (
-        ForeignKeyConstraint(['media_type_id'], ['media_types.id'], name='media_media_type_fk'),
-        ForeignKeyConstraint(['mime_type_id'], ['mime_types.id'], name='media_mime_type_fk'),
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='media_status_fk'),
+        ForeignKeyConstraint(['media_type_id'], ['main.media_types.id'], name='media_media_type_fk'),
+        ForeignKeyConstraint(['mime_type_id'], ['main.mime_types.id'], name='media_mime_type_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='media_status_fk'),
         PrimaryKeyConstraint('id', name='media_pk'),
         Index('idx_media_name', 'name'),
         {'schema': 'main'}
@@ -93,8 +93,8 @@ class Media(Base):
 class MediaVariant(Base):
     __tablename__ = 'media_variant'
     __table_args__ = (
-        ForeignKeyConstraint(['media_id'], ['media.id'], name='media_variant_media_fk'),
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='media_variant_status_fk'),
+        ForeignKeyConstraint(['media_id'], ['main.media.id'], name='media_variant_media_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='media_variant_status_fk'),
         PrimaryKeyConstraint('id', name='media_variant_pk'),
         {'schema': 'main'}
     )

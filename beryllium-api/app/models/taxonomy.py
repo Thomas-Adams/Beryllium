@@ -10,7 +10,7 @@ from app.models.base import Base
 class Categories(Base):
     __tablename__ = 'categories'
     __table_args__ = (
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='categories_status_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='categories_status_fk'),
         PrimaryKeyConstraint('id', name='categories_pk'),
         Index('idx_categories_name', 'name', unique=True),
         {'schema': 'main'}
@@ -36,7 +36,7 @@ class Categories(Base):
 class Tags(Base):
     __tablename__ = 'tags'
     __table_args__ = (
-        ForeignKeyConstraint(['status_id'], ['status.id'], name='tags_status_fk'),
+        ForeignKeyConstraint(['status_id'], ['main.status.id'], name='tags_status_fk'),
         PrimaryKeyConstraint('id', name='tags_pk'),
         Index('idx_tags_name', 'name', unique=True),
         {'schema': 'main'}
@@ -60,8 +60,8 @@ class Tags(Base):
 class ContentTags(Base):
     __tablename__ = 'content_tags'
     __table_args__ = (
-        ForeignKeyConstraint(['content_id'], ['content.id'], name='content_tags_content_fk'),
-        ForeignKeyConstraint(['tag_id'], ['tags.id'], name='content_tags_tag_fk'),
+        ForeignKeyConstraint(['content_id'], ['main.content.id'], name='content_tags_content_fk'),
+        ForeignKeyConstraint(['tag_id'], ['main.tags.id'], name='content_tags_tag_fk'),
         PrimaryKeyConstraint('id', name='content_tags_pk'),
         {'schema': 'main'}
     )
@@ -82,8 +82,8 @@ class ContentTags(Base):
 class MediaTags(Base):
     __tablename__ = 'media_tags'
     __table_args__ = (
-        ForeignKeyConstraint(['media_variant_id'], ['media_variant.id'], name='media_tags_media_variant_fk'),
-        ForeignKeyConstraint(['tag_id'], ['tags.id'], name='media_tags_tags_fk'),
+        ForeignKeyConstraint(['media_variant_id'], ['main.media_variant.id'], name='media_tags_media_variant_fk'),
+        ForeignKeyConstraint(['tag_id'], ['main.tags.id'], name='media_tags_tags_fk'),
         PrimaryKeyConstraint('id', name='media_tags_pk'),
         {'schema': 'main'}
     )
